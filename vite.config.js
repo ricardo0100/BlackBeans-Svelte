@@ -5,7 +5,7 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 export default defineConfig({
   plugins: [svelte()],
   build: {
-    outDir: '../BlackBeans-API/app/templates',
+    outDir: '../BlackBeans-API/application/templates',
     assetsDir: './assets'
   },
   server: {

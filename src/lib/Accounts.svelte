@@ -1,36 +1,70 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-  const dispatch = createEventDispatcher();
+  import { onMount } from "svelte";
+  import EditAccount from "./EditAccount.svelte";
+  import { getAccounts } from "./API";
 
-  function showSignUp() {
-    dispatch("showSignUp");
+  let accounts = [];
+  let editingAccount = { name: "", color: "#000000" };
+
+  async function loadAccounts() {
+    accounts = await getAccounts();
+  }
+  onMount(async () => {
+    await loadAccounts();
+  });
+
+  function showNewAccount() {
+    editingAccount = { name: "", color: "#000000" };
+    showModal();
+  }
+
+  /**
+   * @param {{ name: string; color: string; }} account
+   */
+  function showExistingAccount(account) {
+    editingAccount = account;
+    showModal();
+  }
+
+  function showModal() {
+    const element = document.getElementById("editaccountmodal");
+    // @ts-ignore
+    const modal = bootstrap.Modal.getOrCreateInstance(element);
+    modal.show();
   }
 </script>
 
-<header>
-  <nav class="navbar navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand" href="/">
-        <i style="margin-right: 10px;" class="bi-robot" />
-        Black Beans
-      </a>
-    </div>
-  </nav>
-</header>
-
 <main>
-  <h1>Accounts</h1>
+  <div class="container">
+    <div class="hstack mb-3">
+      <h1>Accounts</h1>
+      <span class="ms-auto" />
+      <button
+        class="btn btn-primary"
+        on:click={(e) => {
+          showNewAccount();
+        }}>New account</button
+      >
+    </div>
+
+    <ul class="list-group">
+      {#each accounts as account (account.id)}
+        <li
+          class="list-group-item list-group-item-action"
+          on:click={(e) => {
+            showExistingAccount(account);
+          }}
+        >
+          <i class="bi-circle-fill me-3" style="color: {account.color}" />{account.name}
+        </li>
+      {/each}
+    </ul>
+  </div>
 </main>
 
-<style>
-  .form-signin {
-    max-width: 330px;
-    padding: 15px;
-    margin: auto;
-  }
-  .form-signin input {
-    padding: 10px;
-    font-size: 16px;
-    margin-bottom: 16px;
-  }
-</style>
+<EditAccount
+  {editingAccount}
+  on:success={async () => {
+    await loadAccounts();
+  }}
+/>
