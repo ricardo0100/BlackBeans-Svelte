@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
-  import EditAccount from "./EditAccount.svelte";
-  import { getAccounts } from "./API";
+  import EditAccount from "../EditAccount.svelte";
+  import { getAccounts } from "../API";
 
   let accounts = [];
   let editingAccount = { name: "", color: "#000000" };
