@@ -14,6 +14,12 @@ export async function getColors() {
   return data.colors;
 }
 
+export async function getIcons() {
+  const res = await fetch("/api/available-icons");
+  const data = await res.json();
+  return data.icons;
+}
+
 
 // Accounts
 
@@ -61,4 +67,12 @@ export async function putExistingAccount(id, name, color) {
 
   const response = await fetch("/api/account/" + id, config);
   return await response.json();
+}
+
+
+// Categories
+
+export async function getCategories() {
+  const res = await fetch("/api/categories");
+  return await res.json();
 }

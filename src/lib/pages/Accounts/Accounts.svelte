@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
-  import EditAccount from "../EditAccount.svelte";
-  import { getAccounts } from "../API";
+  import EditAccount from "./EditAccount.svelte";
+  import { getAccounts } from "../../API";
 
   let accounts = [];
   let editingAccount = { name: "", color: "#000000" };
@@ -32,10 +32,17 @@
     const modal = bootstrap.Modal.getOrCreateInstance(element);
     modal.show();
   }
+
+  let formatter = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+
+  function format(value) {
+    return formatter.format(value);
+  }
 </script>
 
-<main>
-  <div class="container">
     <div class="hstack mb-3">
       <h1>Accounts</h1>
       <span class="ms-auto" />
@@ -55,15 +62,17 @@
             showExistingAccount(account);
           }}
         >
-          <i class="bi-circle-fill me-3" style="color: {account.color}" />{account.name}
+          <div class="">
+            <span class="material-icons float-start me-2" style="color: {account.color};">circle</span>
+            {account.name}
+            <span class="float-end">{format(account.total)}</span>
+          </div>
         </li>
       {/each}
     </ul>
-  </div>
-</main>
+  
 
 <EditAccount
-  {editingAccount}
   on:success={async () => {
     await loadAccounts();
   }}

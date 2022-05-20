@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher, onMount } from "svelte";
-  import { getColors } from "./API";
+  import { getColors } from "../../API";
 
   let colors = [];
   export let selected = "";
@@ -24,7 +24,7 @@
 </script>
 
 <p>Color</p>
-<div class="d-flex justify-content-between p-2">
+<div class="d-flex justify-content-between border rounded p-2">
   {#each colors as color}
     {#if color == selected}
       <i
