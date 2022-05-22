@@ -1,14 +1,12 @@
 <script>
   import { onMount } from "svelte";
-  import { getUser } from "./lib/API";
-
   import Dashboard from "./lib/pages/Dashboard/Dashboard.svelte";
   import Items from "./lib/pages/Items/Items.svelte";
   import Accounts from "./lib/pages/Accounts/Accounts.svelte";
   import Categories from "./lib/pages/Categories/Categories.svelte";
   import Profile from "./lib/pages/Profile/Profile.svelte";
-  import Container from "./lib/pages/Shared/Container.svelte";
-  import Menu from "./lib/pages/Shared/Menu.svelte";
+  import Container from "./lib/pages/Container/Container.svelte";
+  import Menu from "./lib/pages/Container/Menu.svelte";
 
   let page = "";
 

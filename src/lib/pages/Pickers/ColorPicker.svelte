@@ -23,7 +23,8 @@
   }
 </script>
 
-<p>Color</p>
+<p class="mb-1">Color</p>
+
 <div class="d-flex justify-content-between border rounded p-2">
   {#each colors as color}
     {#if color == selected}

@@ -1,7 +1,8 @@
 <script>
+  import { postNewCategory, putExistingCategory } from "../../API";
   import { createEventDispatcher } from "svelte";
-  import ColorPicker from "../Shared/ColorPicker.svelte";
-  import IconPicker from "../Shared/IconPicker.svelte";
+  import ColorPicker from "../Pickers/ColorPicker.svelte";
+  import IconPicker from "../Pickers/IconPicker.svelte";
 
   export let editingCategory = { name: "", color: "", icon: "" };
   let showNameError = false;
@@ -15,9 +16,9 @@
       return;
     }
     if (editingCategory.id == null) {
-      // await postNewAccount(editingCategory.name, editingCategory.color);
+      await postNewCategory(editingCategory.name, editingCategory.color, editingCategory.icon);
     } else {
-      // await putExistingAccount(editingCategory.id, editingCategory.name, editingCategory.color);
+      await putExistingCategory(editingCategory.id, editingCategory.name, editingCategory.color, editingCategory.icon);
     }
     closeModal();
   }

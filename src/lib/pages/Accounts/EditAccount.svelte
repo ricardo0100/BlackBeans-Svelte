@@ -1,5 +1,5 @@
 <script>
-  import ColorPicker from "../Shared/ColorPicker.svelte";
+  import ColorPicker from "../Pickers/ColorPicker.svelte";
   import { postNewAccount, putExistingAccount } from "../../API";
   import { createEventDispatcher } from "svelte";
 

@@ -50,9 +50,10 @@ export async function postNewAccount(name, color) {
 
 /**
  * * @param {integer} id
-   * @param {string} name
-   * @param {any} color
-   */
+ * @param {string} name
+ * @param {any} color
+ * @param {string} id
+ */
 export async function putExistingAccount(id, name, color) {
   const body = JSON.stringify({ name: name, color: color, lastSavedTime: 0, createdTime: 0, isActive: true });
   const headers = new Headers({
@@ -74,5 +75,56 @@ export async function putExistingAccount(id, name, color) {
 
 export async function getCategories() {
   const res = await fetch("/api/categories");
+  return await res.json();
+}
+
+/**
+ * @param {string} name
+ * @param {string} color
+ * @param {string} icon
+ */
+export async function postNewCategory(name, color, icon) {
+  const body = JSON.stringify({ name: name, color: color, icon: icon, lastSavedTime: 0, createdTime: 0, isActive: true });
+  const headers = new Headers({
+    "Content-Type": "application/json",
+  });
+
+  const config = {
+    method: "POST",
+    body: body,
+    headers: headers,
+  };
+
+  const response = await fetch("/api/categories", config);
+  return await response.json();
+}
+
+/**
+ * @param {string} id
+ * @param {any} name
+ * @param {any} color
+ * @param {any} icon
+ */
+export async function putExistingCategory(id, name, color, icon) {
+  const body = JSON.stringify({ name: name, color: color, icon: icon, lastSavedTime: 0, createdTime: 0, isActive: true });
+  const headers = new Headers({
+    "Content-Type": "application/json",
+  });
+
+  const config = {
+    method: "PUT",
+    body: body,
+    headers: headers,
+  };
+
+  const response = await fetch("/api/category/" + id, config);
+  return await response.json();
+}
+
+
+// Items
+
+export async function getItems() {
+  const res = await fetch("/api/items");
   return await res.json();
 }

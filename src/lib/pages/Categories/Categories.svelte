@@ -4,7 +4,7 @@
   import EditCategory from "./EditCategory.svelte";
 
   let categories = [];
-  let editingCategory = { name: "", icon: "" };
+  let editingCategory = { name: "", color: "", icon: "" };
 
   async function loadCategories() {
     categories = await getCategories();
@@ -15,17 +15,17 @@
   });
 
   function showNewCategory() {
-    editingCategory = { name: "", icon: "" };
+    editingCategory = { name: "", color: "", icon: "" };
     showModal();
   }
 
   // /**
-  //  * @param {{ name: string; color: string; }}
+  //  * @param {{ name: string; color: string; icon: string; }}
   //  */
-  // function showExistingAccount(account) {
-  //   editingAccount = account;
-  //   showModal();
-  // }
+  function showExistingCategory(category) {
+    editingCategory = category;
+    showModal();
+  }
 
   function showModal() {
     const element = document.getElementById("editcategorymodal");
@@ -51,15 +51,17 @@
     <li
       class="list-group-item list-group-item-action"
       on:click={(e) => {
-        // showExistingAccount(account);
+        showExistingCategory(category);
       }}
     >
-      <i class="bi-circle-fill me-3" style="color: {category}" />{category.name}
+      <span class="material-icons float-start me-2" style="color: {category.color};">{category.icon}</span>
+      {category.name}
     </li>
   {/each}
 </ul>
 
 <EditCategory
+  {editingCategory}
   on:success={async () => {
     await loadCategories();
   }}

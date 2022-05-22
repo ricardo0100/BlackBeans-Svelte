@@ -84,16 +84,12 @@
   }
 </script>
 
-<div class="hstack mb-3">
-  <h1>Dashboard</h1>
-</div>
-
 <div class="row">
   <div class="col-lg-4 text-center">
-    <canvas class="mt-5" id="categoriesChart" />
+    <canvas id="categoriesChart" />
   </div>
   <div class="col-lg-8 text-center">
-    <canvas class="mt-5" id="timeChart" />
+    <canvas id="timeChart" />
   </div>
 </div>
 

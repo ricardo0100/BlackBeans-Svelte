@@ -43,36 +43,35 @@
   }
 </script>
 
-    <div class="hstack mb-3">
-      <h1>Accounts</h1>
-      <span class="ms-auto" />
-      <button
-        class="btn btn-primary"
-        on:click={(e) => {
-          showNewAccount();
-        }}>New account</button
-      >
-    </div>
+<div class="hstack mb-3">
+  <h1>Accounts</h1>
+  <span class="ms-auto" />
+  <button
+    class="btn btn-primary"
+    on:click={(e) => {
+      showNewAccount();
+    }}>New account</button
+  >
+</div>
 
-    <ul class="list-group">
-      {#each accounts as account (account.id)}
-        <li
-          class="list-group-item list-group-item-action"
-          on:click={(e) => {
-            showExistingAccount(account);
-          }}
-        >
-          <div class="">
-            <span class="material-icons float-start me-2" style="color: {account.color};">circle</span>
-            {account.name}
-            <span class="float-end">{format(account.total)}</span>
-          </div>
-        </li>
-      {/each}
-    </ul>
-  
+<ul class="list-group">
+  {#each accounts as account (account.id)}
+    <li class="list-group-item list-group-item-action">
+      <span class="material-icons float-start me-2" style="color: {account.color};">circle</span>
+      {account.name}
+      <button
+        class="btn btn-link float-end p-0 m-0"
+        on:click={(e) => {
+          showExistingAccount(account);
+        }}><span class="material-icons">edit</span></button
+      >
+      <span class="float-end me-2">{format(account.total)}</span>
+    </li>
+  {/each}
+</ul>
 
 <EditAccount
+  {editingAccount}
   on:success={async () => {
     await loadAccounts();
   }}
