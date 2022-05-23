@@ -1,12 +1,13 @@
 <script>
   import { onMount } from "svelte";
-  import Dashboard from "./lib/pages/Dashboard/Dashboard.svelte";
-  import Items from "./lib/pages/Items/Items.svelte";
-  import Accounts from "./lib/pages/Accounts/Accounts.svelte";
-  import Categories from "./lib/pages/Categories/Categories.svelte";
-  import Profile from "./lib/pages/Profile/Profile.svelte";
-  import Container from "./lib/pages/Container/Container.svelte";
-  import Menu from "./lib/pages/Container/Menu.svelte";
+  import Dashboard from "./lib/modules/Dashboard/Dashboard.svelte";
+  import Items from "./lib/modules/Items/Items.svelte";
+  import Accounts from "./lib/modules/Accounts/Accounts.svelte";
+  import Categories from "./lib/modules/Categories/Categories.svelte";
+  import Profile from "./lib/modules/Profile/Profile.svelte";
+  import Container from "./lib/modules/Container/Container.svelte";
+  import Menu from "./lib/modules/Container/Menu.svelte";
+import Footer from "./lib/modules/Container/Footer.svelte";
 
   let page = "";
 
@@ -42,3 +43,5 @@
     <Dashboard />
   {/if}
 </Container>
+
+<!-- <Footer /> -->

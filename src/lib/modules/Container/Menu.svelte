@@ -46,7 +46,7 @@
             </li>
           {/each}
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="dropdownMenuProfile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="/profile" id="dropdownMenuProfile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               {user.name}
             </a>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuProfile">

@@ -128,3 +128,72 @@ export async function getItems() {
   const res = await fetch("/api/items");
   return await res.json();
 }
+
+/**
+ * @param {string} name
+ * @param {number} value
+ * @param {number} accountId
+ * @param {number} categoryId
+ * @param {boolean} isCredit
+ */
+export async function postItem(name, value, accountId, categoryId, isCredit) {
+  const body = JSON.stringify(
+    {
+      name: name,
+      value: value,
+      accountId: accountId,
+      categoryId: categoryId,
+      lastSavedTime: 0,
+      createdTime: 0,
+      effectivationTime: 0,
+      isActive: true,
+      isCredit: isCredit
+    });
+  const headers = new Headers({
+    "Content-Type": "application/json",
+  });
+
+  const config = {
+    method: "POST",
+    body: body,
+    headers: headers,
+  };
+
+  const response = await fetch("/api/items", config);
+  return await response.json();
+}
+
+/**
+ * @param {number} id
+ * @param {string} name
+ * @param {number} value
+ * @param {number} accountId
+ * @param {number} categoryId
+ * @param {boolean} isCredit
+ */
+export async function putItem(id, name, value, accountId, categoryId, isCredit) {
+  const body = JSON.stringify(
+    {
+      name: name,
+      value: value,
+      accountId: accountId,
+      categoryId: categoryId,
+      lastSavedTime: 0,
+      createdTime: 0,
+      effectivationTime: 0,
+      isActive: true,
+      isCredit: isCredit
+    });
+  const headers = new Headers({
+    "Content-Type": "application/json",
+  });
+
+  const config = {
+    method: "PUT",
+    body: body,
+    headers: headers,
+  };
+
+  const response = await fetch("/api/item/" + id, config);
+  return await response.json();
+}
