@@ -4,10 +4,13 @@
   import EditCategory from "./EditCategory.svelte";
 
   let categories = [];
+  let isLoading = false;
   let editingCategory = { name: "", color: "", icon: "" };
 
   async function loadCategories() {
+    isLoading = true;
     categories = await getCategories();
+    isLoading = false;
   }
 
   onMount(async () => {
@@ -45,6 +48,14 @@
     }}>New category</button
   >
 </div>
+
+{#if isLoading}
+  <div class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+{/if}
 
 <ul class="list-group">
   {#each categories as category (category.id)}

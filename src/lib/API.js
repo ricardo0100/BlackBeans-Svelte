@@ -197,3 +197,18 @@ export async function putItem(id, name, value, accountId, categoryId, isCredit) 
   const response = await fetch("/api/item/" + id, config);
   return await response.json();
 }
+
+/**
+ * @param {number} item_id
+ */
+export async function deleteItem(item_id) {
+  const config = {
+    method: "DELETE"
+  };
+
+  const response = await fetch("/api/item/" + item_id, config);
+  if (response.status == 200) {
+    return true;
+  }
+  return false;
+}

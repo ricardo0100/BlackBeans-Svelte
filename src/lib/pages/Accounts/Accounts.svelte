@@ -3,11 +3,14 @@
   import EditAccount from "./EditAccount.svelte";
   import { getAccounts } from "../../API";
 
+  let isLoading = false;
   let accounts = [];
   let editingAccount = { name: "", color: "#000000" };
 
   async function loadAccounts() {
+    isLoading = true;
     accounts = await getAccounts();
+    isLoading = false;
   }
   onMount(async () => {
     await loadAccounts();
@@ -53,6 +56,14 @@
     }}>New account</button
   >
 </div>
+
+{#if isLoading}
+  <div class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+{/if}
 
 <ul class="list-group">
   {#each accounts as account (account.id)}

@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import { putItem, postItem } from "../../API";
+  import { putItem, postItem, deleteItem } from "../../API";
   import AccountPicker from "../Pickers/AccountPicker.svelte";
   import CategoryPicker from "../Pickers/CategoryPicker.svelte";
 
@@ -10,12 +10,17 @@
 
   let showNameError = false;
 
+  var formatter = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+
   async function onSaveClicked() {
     if (editingItem.name == "") {
       showNameError = true;
       return;
     }
-    console.log(editingItem);
+
     if (editingItem.id == null) {
       await postItem(editingItem.name, editingItem.value, editingItem.account.id, editingItem.category.id, editingItem.isCredit);
     } else {
@@ -31,6 +36,16 @@
     // @ts-ignore
     const modal = bootstrap.Modal.getOrCreateInstance(element);
     modal.hide();
+  }
+
+  async function onConfirmDeleteClicked() {
+    if (await deleteItem(editingItem.id)) {
+      const element = document.getElementById("deleteModal");
+      // @ts-ignore
+      const modal = bootstrap.Modal.getOrCreateInstance(element);
+      modal.hide();
+      dispatch("success");
+    }
   }
 </script>
 
@@ -78,15 +93,52 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          on:click={(e) => {
-            onSaveClicked();
-          }}>Save</button
-        >
+        <div class="w-100 hstack gap-3">
+          <button type="button" class="btn btn-outline-danger me-auto" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            on:click={(e) => {
+              onSaveClicked();
+            }}>Save</button
+          >
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+{#if editingItem.name != ""}
+  <div class="modal" id="deleteModal" aria-labelledby="deleteModal" tabindex="-2">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete item?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this item?</p>
+          <ul>
+            <li>Name: <b>{editingItem.name}</b></li>
+            <li>Value: <b>{formatter.format(editingItem.value)}</b></li>
+            <li>Account: <b>{editingItem.account.name}</b></li>
+            {#if editingItem.category != null}
+              <li>Category: <b>{editingItem.category.name}</b></li>
+            {/if}
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editItemModal">Cancel</button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            on:click={() => {
+              onConfirmDeleteClicked();
+            }}>Delete</button
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+{/if}
