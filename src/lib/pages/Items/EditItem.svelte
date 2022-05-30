@@ -3,8 +3,9 @@
   import { putItem, postItem, deleteItem } from "../../API";
   import AccountPicker from "../Pickers/AccountPicker.svelte";
   import CategoryPicker from "../Pickers/CategoryPicker.svelte";
+  import { Item } from "../../model/Item";
 
-  export let editingItem = {};
+  export let editingItem = new Item();
 
   const dispatch = createEventDispatcher();
 
@@ -22,9 +23,9 @@
     }
 
     if (editingItem.id == null) {
-      await postItem(editingItem.name, editingItem.value, editingItem.account.id, editingItem.category.id, editingItem.isCredit);
+      await postItem(editingItem.name, editingItem.value, editingItem.account.id, editingItem.category.id, editingItem.isCredit, editingItem.date);
     } else {
-      await putItem(editingItem.id, editingItem.name, editingItem.value, editingItem.account.id, editingItem.category.id, editingItem.isCredit);
+      await putItem(editingItem.id, editingItem.name, editingItem.value, editingItem.account.id, editingItem.category.id, editingItem.isCredit, editingItem.date);
     }
 
     closeModal();
@@ -86,6 +87,10 @@
           </div>
         </div>
         <div class="mb-3">
+          <p class="mb-1">Date</p>
+          <input bind:value={editingItem.date} type="date" class="form-control" />
+        </div>
+        <div class="mb-3">
           <AccountPicker selectedAccount={editingItem.account} on:selected={(e) => (editingItem.account = e.detail.account)} />
         </div>
         <div class="mb-3">
@@ -94,7 +99,11 @@
       </div>
       <div class="modal-footer">
         <div class="w-100 hstack gap-3">
-          <button type="button" class="btn btn-outline-danger me-auto" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+          <div class="me-auto">
+            {#if editingItem.id != null}
+              <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+            {/if}
+          </div>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button
             type="button"
@@ -122,9 +131,9 @@
           <ul>
             <li>Name: <b>{editingItem.name}</b></li>
             <li>Value: <b>{formatter.format(editingItem.value)}</b></li>
-            <li>Account: <b>{editingItem.account.name}</b></li>
+            <li>Account: <b>{editingItem.account?.name}</b></li>
             {#if editingItem.category != null}
-              <li>Category: <b>{editingItem.category.name}</b></li>
+              <li>Category: <b>{editingItem.category?.name}</b></li>
             {/if}
           </ul>
         </div>

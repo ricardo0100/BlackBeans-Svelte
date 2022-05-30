@@ -16,7 +16,6 @@
    * @param {string} icon
    */
   function setIcon(icon) {
-    console.log(icon);
     selected = icon;
     dispatch("selected", {
       icon: icon,

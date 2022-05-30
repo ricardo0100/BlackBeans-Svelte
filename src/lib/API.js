@@ -70,6 +70,22 @@ export async function putExistingAccount(id, name, color) {
   return await response.json();
 }
 
+/**
+ * @param {number} id
+ */
+export async function deleteAccount(id) {
+  const config = {
+    method: "DELETE"
+  };
+
+  let response = await fetch("/api/account/" + id, config);
+  if (response.status == 200) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 
 // Categories
 
@@ -121,6 +137,22 @@ export async function putExistingCategory(id, name, color, icon) {
   return await response.json();
 }
 
+/**
+ * @param {number} id
+ */
+ export async function deleteCategory(id) {
+  const config = {
+    method: "DELETE"
+  };
+
+  let response = await fetch("/api/category/" + id, config);
+  if (response.status == 200) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 
 // Items
 
@@ -135,17 +167,18 @@ export async function getItems() {
  * @param {number} accountId
  * @param {number} categoryId
  * @param {boolean} isCredit
+ * @param {string} date
  */
-export async function postItem(name, value, accountId, categoryId, isCredit) {
+export async function postItem(name, value, accountId, categoryId, isCredit, date) {
   const body = JSON.stringify(
     {
       name: name,
       value: value,
       accountId: accountId,
       categoryId: categoryId,
-      lastSavedTime: 0,
-      createdTime: 0,
-      effectivationTime: 0,
+      lastSavedTime: new Date().getTime() * 1000,
+      createdTime: new Date().getTime() * 1000,
+      date: date,
       isActive: true,
       isCredit: isCredit
     });
@@ -170,20 +203,21 @@ export async function postItem(name, value, accountId, categoryId, isCredit) {
  * @param {number} accountId
  * @param {number} categoryId
  * @param {boolean} isCredit
+ * @param {string} date
  */
-export async function putItem(id, name, value, accountId, categoryId, isCredit) {
+export async function putItem(id, name, value, accountId, categoryId, isCredit, date) {
   const body = JSON.stringify(
     {
       name: name,
       value: value,
       accountId: accountId,
       categoryId: categoryId,
-      lastSavedTime: 0,
-      createdTime: 0,
-      effectivationTime: 0,
+      lastSavedTime: new Date().getTime(),
+      date: date,
       isActive: true,
       isCredit: isCredit
     });
+  
   const headers = new Headers({
     "Content-Type": "application/json",
   });

@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import EditAccount from "./EditAccount.svelte";
   import { getAccounts } from "../../API";
+  import { formatCurrency } from "../../Formatters";
 
   let isLoading = false;
   let accounts = [];
@@ -35,15 +36,6 @@
     const modal = bootstrap.Modal.getOrCreateInstance(element);
     modal.show();
   }
-
-  let formatter = new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
-
-  function format(value) {
-    return formatter.format(value);
-  }
 </script>
 
 <div class="hstack mb-3">
@@ -75,7 +67,7 @@
     >
       <span class="material-icons float-start me-2" style="color: {account.color};">circle</span>
       {account.name}
-      <span class="float-end me-2" class:text-danger={account.total < 0} class:text-success={account.total >= 0}>{format(account.total)}</span>
+      <span class="float-end me-2" class:text-danger={account.total < 0} class:text-success={account.total >= 0}>{formatCurrency(account.total)}</span>
     </li>
   {/each}
 </ul>
