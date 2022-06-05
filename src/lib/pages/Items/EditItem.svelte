@@ -91,6 +91,10 @@
           <input bind:value={editingItem.date} type="date" class="form-control" />
         </div>
         <div class="mb-3">
+          <p class="mb-1">Number of payments</p>
+          <input  type="number" class="form-control" />
+        </div>
+        <div class="mb-3">
           <AccountPicker selectedAccount={editingItem.account} on:selected={(e) => (editingItem.account = e.detail.account)} />
         </div>
         <div class="mb-3">

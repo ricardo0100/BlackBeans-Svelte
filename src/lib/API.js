@@ -20,6 +20,12 @@ export async function getIcons() {
   return data.icons;
 }
 
+export async function getDashboard() {
+  const res = await fetch("/api/dashboard");
+  const data = await res.json();
+  return data;
+}
+
 
 // Accounts
 

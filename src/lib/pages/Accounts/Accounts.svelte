@@ -65,9 +65,16 @@
         showExistingAccount(account);
       }}
     >
-      <span class="material-icons float-start me-2" style="color: {account.color};">circle</span>
-      {account.name}
-      <span class="float-end me-2" class:text-danger={account.total < 0} class:text-success={account.total >= 0}>{formatCurrency(account.total)}</span>
+      <div class="d-flex align-items-center">
+        <span class="material-icons me-2" style="color: {account.color};">circle</span>
+        {account.name}
+        <div class="ms-auto text-end">
+          <span class="float-end me-2" class:text-danger={account.total < 0} class:text-success={account.total >= 0}>
+            <small class="text-secondary">Total in 04/06/2022</small><br />
+            {formatCurrency(account.total)}
+          </span>
+        </div>
+      </div>
     </li>
   {/each}
 </ul>
