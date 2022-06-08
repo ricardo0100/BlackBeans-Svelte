@@ -22,8 +22,13 @@
       return;
     }
 
+    let categoryId = null;
+    if (editingItem.category != null) {
+      categoryId = editingItem.category.id;
+    }
+
     if (editingItem.id == null) {
-      await postItem(editingItem.name, editingItem.value, editingItem.account.id, editingItem.category.id, editingItem.isCredit, editingItem.date);
+      await postItem(editingItem.name, editingItem.value, editingItem.account.id, categoryId, editingItem.isCredit, editingItem.date);
     } else {
       await putItem(editingItem.id, editingItem.name, editingItem.value, editingItem.account.id, editingItem.category.id, editingItem.isCredit, editingItem.date);
     }
@@ -92,7 +97,7 @@
         </div>
         <div class="mb-3">
           <p class="mb-1">Number of payments</p>
-          <input  type="number" class="form-control" />
+          <input type="number" class="form-control" />
         </div>
         <div class="mb-3">
           <AccountPicker selectedAccount={editingItem.account} on:selected={(e) => (editingItem.account = e.detail.account)} />

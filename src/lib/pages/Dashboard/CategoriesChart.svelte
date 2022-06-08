@@ -1,6 +1,6 @@
 <script>
   import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from "chart.js";
-import Categories from "../Categories/Categories.svelte";
+  import Categories from "../Categories/Categories.svelte";
 
   Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
@@ -14,9 +14,9 @@ import Categories from "../Categories/Categories.svelte";
   function setupCategoriesChart() {
     if (categories.length == 0) return;
 
-    let filtered = categories.filter((category)=>{
-      return category.total > 0
-    })
+    let filtered = categories.filter((category) => {
+      return category.total > 0;
+    });
 
     let labels = filtered.map((category) => {
       return category.name;

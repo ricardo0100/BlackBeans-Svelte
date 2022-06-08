@@ -171,7 +171,7 @@ export async function getItems() {
  * @param {string} name
  * @param {number} value
  * @param {number} accountId
- * @param {number} categoryId
+ * @param {number|null} categoryId
  * @param {boolean} isCredit
  * @param {string} date
  */
