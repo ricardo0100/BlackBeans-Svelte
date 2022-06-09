@@ -1,21 +1,17 @@
 <script>
-  import { getAccounts, getCategories, getItems } from "../../API";
+  import { getItems } from "../../API";
   import { onMount } from "svelte";
   import EditItem from "./EditItem.svelte";
   import { formatCurrency, formatDate } from "../../Formatters";
   import { Item } from "../../model/Item";
+  import ItemsFilter from "./ItemsFilter.svelte";
 
   let allItems = [];
   let items = [];
   let editingItem = new Item();
   let isLoading = false;
   let showAPIError = false;
-  let startDate = new Date().toISOString().slice(0, 7) + "-01";
-  let endDate = new Date().toISOString().slice(0, 10);
-  let accounts = [];
-  let selectedAccount = null;
-  let categories = [];
-  let selectedCategory = null;
+
   $: total = items.reduce((acumulator, item) => {
     if (item.isCredit) return acumulator + item.value;
     else return acumulator - item.value;
@@ -27,7 +23,7 @@
 
     try {
       allItems = await getItems();
-      clearFilter();
+      items = allItems;
       showAPIError = false;
       isLoading = false;
     } catch (error) {
@@ -36,18 +32,8 @@
     }
   }
 
-  async function loadAccounts() {
-    accounts = await getAccounts();
-  }
-
-  async function loadCategories() {
-    categories = await getCategories();
-  }
-
   onMount(() => {
     loadItems();
-    loadAccounts();
-    loadCategories();
   });
 
   function onNewItemClicked() {
@@ -67,31 +53,32 @@
     modal.show();
   }
 
-  function applyFilter() {
+  function applyFilter(filter) {
     items = allItems.filter((item) => {
-      return item.date <= endDate && item.date >= startDate;
+      return item.date <= filter.endDate && item.date >= filter.startDate;
     });
-    if (selectedAccount != null) {
+    if (filter.selectedAccount != null) {
       items = items.filter((item) => {
-        return item.account.id == selectedAccount.id;
+        return item.account.id == filter.selectedAccount.id;
       });
     }
-    if (selectedCategory != null) {
+    if (filter.selectedCategory != null) {
       items = items.filter((item) => {
-        if(item.category != null) {
-          return item.category.id == selectedCategory.id;
+        if (item.category != null) {
+          return item.category.id == filter.selectedCategory.id;
         }
         return false;
       });
     }
-  }
-
-  function clearFilter() {
-    startDate = new Date().toISOString().slice(0, 7) + "-01";
-    endDate = new Date().toISOString().slice(0, 10);
-    selectedAccount = null;
-    selectedCategory = null;
-    applyFilter();
+    items = items.sort((a, b) => {
+      if (a.date == b.date) {
+        return b.id - a.id;
+      } else if (a.date < b.date) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
   }
 </script>
 
@@ -106,95 +93,12 @@
   >
 </div>
 
-<div class="d-flex align-content-center gap-3">
-  <input bind:value={startDate} style="font-size: 0.95em;" type="date" class="border border-secondary text-secondary rounded p-2" />
-  <input bind:value={endDate} style="font-size: 0.95em;" type="date" class="border border-secondary text-secondary rounded p-2" />
-  <div class="dropdown">
-    <button class="btn btn-outline-secondary dropdown-toggle p-2" type="button" id="dropdownAccounts" data-bs-toggle="dropdown" aria-expanded="false">
-      {#if selectedAccount == null}
-        All accounts
-      {:else}
-        <span class="material-icons me-2" style="color: {selectedAccount.color}; font-size: 1rem;">circle</span>{selectedAccount.name}
-      {/if}
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownAccounts">
-      <li>
-        <button
-          type="button"
-          class="dropdown-item"
-          on:click={() => {
-            selectedAccount = null;
-          }}
-        >
-          <span class="material-icons me-2" style="color: #FFFFFF00; font-size: 1rem;">circle</span>All accounts
-        </button>
-      </li>
-      {#each accounts as account}
-        <li>
-          <button
-            type="button"
-            class="dropdown-item"
-            on:click={() => {
-              selectedAccount = account;
-            }}
-          >
-            <span class="material-icons me-2" style="color: {account.color}; font-size: 1rem;">circle</span>{account.name}
-          </button>
-        </li>
-      {/each}
-    </ul>
-  </div>
-  <div class="dropdown">
-    <button class="btn btn-outline-secondary dropdown-toggle p-2" type="button" id="dropdownAccounts" data-bs-toggle="dropdown" aria-expanded="false">
-      {#if selectedCategory == null}
-        All categories
-      {:else}
-        <span class="material-icons me-2" style="color: {selectedCategory.color}; font-size: 1rem;">{selectedCategory.icon}</span>{selectedCategory.name}
-      {/if}
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownAccounts">
-      <li>
-        <button
-          type="button"
-          class="dropdown-item"
-          on:click={() => {
-            selectedCategory = null;
-          }}
-        >
-          <span class="material-icons me-2" style="color: #FFFFFF00; font-size: 1rem;">circle</span>All categories
-        </button>
-      </li>
-
-      {#each categories as category}
-        <li>
-          <button
-            type="button"
-            class="dropdown-item"
-            on:click={() => {
-              selectedCategory = category;
-            }}
-          >
-            <span class="material-icons me-2" style="color: {category.color}; font-size: 1rem;">{category.icon}</span>{category.name}
-          </button>
-        </li>
-      {/each}
-    </ul>
-  </div>
-  <button
-    type="button"
-    class="btn btn-primary b-1"
-    on:click={() => {
-      applyFilter();
-    }}>Filter</button
-  >
-  <button
-    type="button"
-    class="btn b-1"
-    on:click={() => {
-      clearFilter();
-    }}>Clear</button
-  >
-</div>
+<ItemsFilter
+  on:filterApplied={(e) => {
+    console.log(e.detail);
+    applyFilter(e.detail);
+  }}
+/>
 
 {#if isLoading}
   <div class="text-center">
